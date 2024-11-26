@@ -12,10 +12,10 @@ import com.oocl.springbootemployee.model.Gender;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class CompanyRepository {
+public class CompanyInMemoryRepository {
     private final List<Company> companies = new ArrayList<>();
 
-    CompanyRepository() {
+    CompanyInMemoryRepository() {
         List<Employee> employeesInSpring = new ArrayList<>();
         employeesInSpring.add(new Employee(1, "alice", 21, Gender.FEMALE, 6000.0));
         employeesInSpring.add(new Employee(2, "bob", 20, Gender.MALE, 6200.0));
