@@ -4,6 +4,8 @@ import com.oocl.springbootemployee.model.Company;
 import com.oocl.springbootemployee.model.Employee;
 import com.oocl.springbootemployee.service.CompanyService;
 import java.util.List;
+
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,7 +45,7 @@ public class CompanyController {
     }
 
     @GetMapping(params = {"pageIndex", "pageSize"})
-    public List<Company> getCompaniesByPagination(@RequestParam Integer pageIndex,
+    public Page<Company> getCompaniesByPagination(@RequestParam Integer pageIndex,
                                                   @RequestParam Integer pageSize) {
         return companyService.findAll(pageIndex, pageSize);
     }
@@ -62,6 +64,6 @@ public class CompanyController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void removeEmployee(@PathVariable Integer id) {
-        companyService.findAll().removeIf(company -> company.getId().equals(id));
+        companyService.delete(id);
     }
 }

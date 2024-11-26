@@ -31,9 +31,6 @@ class EmployeeServiceTest {
     EmployeeService employeeService;
 
     @Mock
-    EmployeeInMemoryRepository mockedEmployeeInMemoryRepository;
-
-    @Mock
     EmployeeRepository mockedEmployeeRepository;
 
     @Test
