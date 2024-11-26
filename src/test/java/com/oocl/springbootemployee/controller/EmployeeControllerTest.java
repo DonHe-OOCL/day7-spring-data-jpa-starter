@@ -6,7 +6,7 @@ import static org.hamcrest.Matchers.hasSize;
 
 import com.oocl.springbootemployee.model.Employee;
 import com.oocl.springbootemployee.model.Gender;
-import com.oocl.springbootemployee.repository.EmployeeRepository;
+import com.oocl.springbootemployee.repository.EmployeeInMemoryRepository;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,7 +29,7 @@ class EmployeeControllerTest {
     private MockMvc client;
 
     @Autowired
-    private EmployeeRepository employeeRepository;
+    private EmployeeInMemoryRepository employeeRepository;
 
     @Autowired
     private JacksonTester<List<Employee>> employeesJacksonTester;

@@ -10,10 +10,10 @@ import com.oocl.springbootemployee.model.Gender;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class EmployeeRepository {
+public class EmployeeInMemoryRepository {
     private final List<Employee> employees = new ArrayList<>();
 
-    public EmployeeRepository() {
+    public EmployeeInMemoryRepository() {
         initEmployeeData();
     }
 
