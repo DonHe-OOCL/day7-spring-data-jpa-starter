@@ -11,7 +11,6 @@ import java.util.List;
 import com.oocl.springbootemployee.repository.EmployeeRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 @Service
 public class EmployeeService {
@@ -56,13 +55,27 @@ public class EmployeeService {
         Employee employeeExisted = findById(employeeId);
         if(!employeeExisted.getActive())
             throw new EmployeeInactiveException();
-        employeeExisted.setAge(employee.getAge());
-        employeeExisted.setSalary(employee.getSalary());
-        employeeRepository.save(employeeExisted);
+        buildEmployee(employeeExisted, employee);
+        employeeRepository.saveAndFlush(employeeExisted);
         return employeeExisted;
     }
 
     public void delete(Integer employeeId) {
         employeeRepository.deleteById(employeeId);
+    }
+
+    private void buildEmployee(Employee employeeStored, Employee newEmployee) {
+        if (newEmployee.getName() != null) {
+            employeeStored.setName(newEmployee.getName());
+        }
+        if (newEmployee.getAge() != null) {
+            employeeStored.setAge(newEmployee.getAge());
+        }
+        if (newEmployee.getGender() != null) {
+            employeeStored.setGender(newEmployee.getGender());
+        }
+        if (newEmployee.getSalary() != null) {
+            employeeStored.setSalary(newEmployee.getSalary());
+        }
     }
 }

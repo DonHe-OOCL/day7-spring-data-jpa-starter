@@ -151,7 +151,8 @@ class EmployeeControllerTest {
     @Test
     void should_update_employee_success() throws Exception {
         // Given
-        Integer givenId = 1;
+        List<Employee> givenEmployees = employeeRepository.findAll();
+        Integer givenId = givenEmployees.get(0).getId();
         String givenName = "New Employee";
         Integer givenAge = 30;
         Gender givenGender = Gender.FEMALE;
@@ -177,13 +178,12 @@ class EmployeeControllerTest {
             .andExpect(MockMvcResultMatchers.jsonPath("$.age").value(givenAge))
             .andExpect(MockMvcResultMatchers.jsonPath("$.gender").value(givenGender.name()))
             .andExpect(MockMvcResultMatchers.jsonPath("$.salary").value(givenSalary));
-        List<Employee> employees = employeeInMemoryRepository.findAll();
-        assertThat(employees).hasSize(5);
-        assertThat(employees.get(0).getId()).isEqualTo(1);
-        assertThat(employees.get(0).getName()).isEqualTo(givenName);
-        assertThat(employees.get(0).getAge()).isEqualTo(givenAge);
-        assertThat(employees.get(0).getGender()).isEqualTo(givenGender);
-        assertThat(employees.get(0).getSalary()).isEqualTo(givenSalary);
+        Employee employee = employeeRepository.findById(givenId).orElseThrow(EmployeeInactiveException::new);
+        assertThat(employee.getId()).isEqualTo(givenId);
+        assertThat(employee.getName()).isEqualTo(givenName);
+        assertThat(employee.getAge()).isEqualTo(givenAge);
+        assertThat(employee.getGender()).isEqualTo(givenGender);
+        assertThat(employee.getSalary()).isEqualTo(givenSalary);
     }
 
     @Test
@@ -195,7 +195,7 @@ class EmployeeControllerTest {
         // Then
         client.perform(MockMvcRequestBuilders.delete("/employees/" + givenId))
             .andExpect(MockMvcResultMatchers.status().isNoContent());
-        List<Employee> employees = employeeInMemoryRepository.findAll();
+        List<Employee> employees = employeeRepository.findAll();
         assertThat(employees).hasSize(4);
         assertThat(employees.get(0).getId()).isEqualTo(2);
         assertThat(employees.get(1).getId()).isEqualTo(3);
@@ -206,7 +206,7 @@ class EmployeeControllerTest {
     @Test
     void should_return_employees_when_get_by_pageable() throws Exception {
         //given
-        final List<Employee> givenEmployees = employeeInMemoryRepository.findAll();
+        final List<Employee> givenEmployees = employeeRepository.findAll();
 
         //when
         //then
