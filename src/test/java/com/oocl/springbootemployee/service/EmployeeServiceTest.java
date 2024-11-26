@@ -50,6 +50,19 @@ class EmployeeServiceTest {
     }
 
     @Test
+    void should_return_the_given_employees_when_getByGender() {
+        //given
+        when(mockedEmployeeRepository.getByGender(Gender.FEMALE)).thenReturn(List.of(new Employee(1, "Lucy", 18, Gender.FEMALE, 8000.0)));
+
+        //when
+        List<Employee> employees = employeeService.findAll(Gender.FEMALE);
+
+        //then
+        assertEquals(1, employees.size());
+        assertEquals("Lucy", employees.get(0).getName());
+    }
+
+    @Test
     void should_return_the_created_employee_when_create_given_a_employee() {
         //given
         Employee lucy = new Employee(1, "Lucy", 18, Gender.FEMALE, 8000.0);

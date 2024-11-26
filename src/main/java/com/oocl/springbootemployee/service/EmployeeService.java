@@ -26,7 +26,7 @@ public class EmployeeService {
     }
 
     public List<Employee> findAll(Gender gender) {
-        return employeeInMemoryRepository.findAllByGender(gender);
+        return employeeRepository.getByGender(gender);
     }
 
     public List<Employee> findAll(Integer page, Integer pageSize) {
