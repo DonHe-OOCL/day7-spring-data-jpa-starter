@@ -53,7 +53,7 @@ public class EmployeeService {
 
     public Employee update(Integer employeeId , Employee employee) {
         Employee employeeExisted = findById(employeeId);
-        if(!employeeExisted.getActive())
+        if(employeeExisted == null || !employeeExisted.getActive())
             throw new EmployeeInactiveException();
         buildEmployee(employeeExisted, employee);
         employeeRepository.saveAndFlush(employeeExisted);
