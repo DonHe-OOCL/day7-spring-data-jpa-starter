@@ -1,10 +1,9 @@
 package com.oocl.springbootemployee.controller;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
 
-import com.oocl.springbootemployee.exception.EmployeeNotFoundException;
+import com.oocl.springbootemployee.exception.EmployeeInactiveException;
 import com.oocl.springbootemployee.model.Employee;
 import com.oocl.springbootemployee.model.Gender;
 import com.oocl.springbootemployee.repository.EmployeeInMemoryRepository;
@@ -142,7 +141,7 @@ class EmployeeControllerTest {
         ).andReturn().getResponse().getContentAsString();
         Employee employee = employeeJacksonTester.parseObject(contentAsString);
 
-        Employee findEmployee = employeeRepository.findById(employee.getId()).orElseThrow(EmployeeNotFoundException::new);
+        Employee findEmployee = employeeRepository.findById(employee.getId()).orElseThrow(EmployeeInactiveException::new);
         assertThat(findEmployee.getName()).isEqualTo(givenName);
         assertThat(findEmployee.getAge()).isEqualTo(givenAge);
         assertThat(findEmployee.getGender()).isEqualTo(givenGender);
