@@ -118,7 +118,7 @@ class EmployeeControllerTest {
     @Test
     void should_create_employee_success() throws Exception {
         // Given
-        employeeInMemoryRepository.findAll().clear();
+        employeeRepository.findAll().clear();
         String givenName = "New Employee";
         Integer givenAge = 18;
         Gender givenGender = Gender.FEMALE;
