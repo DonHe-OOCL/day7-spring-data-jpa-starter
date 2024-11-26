@@ -34,7 +34,9 @@ public class EmployeeService {
     }
 
     public List<Employee> findAll(Integer page, Integer pageSize) {
-        return employeeInMemoryRepository.findAllByPage(page, pageSize);
+        PageRequest pageRequest = PageRequest.of(page - 1, pageSize);
+        Page<Employee> content = employeeRepository.findAll(pageRequest);
+        return content.getContent();
     }
 
     public Employee findById(Integer employeeId) {
