@@ -16,6 +16,7 @@ import com.oocl.springbootemployee.model.Employee;
 import com.oocl.springbootemployee.model.Gender;
 import com.oocl.springbootemployee.repository.EmployeeInMemoryRepository;
 import java.util.List;
+import java.util.Optional;
 
 import com.oocl.springbootemployee.repository.EmployeeRepository;
 import org.junit.jupiter.api.Test;
@@ -66,7 +67,7 @@ class EmployeeServiceTest {
     void should_return_the_given_employees_when_findById() {
         //given
         Employee lucy = new Employee(1, "Lucy", 18, Gender.FEMALE, 8000.0);
-        when(mockedEmployeeRepository.findById(1).get()).thenReturn(lucy);
+        when(mockedEmployeeRepository.findById(1)).thenReturn(Optional.of(lucy));
 
         //when
         Employee employee = employeeService.findById(1);
@@ -115,7 +116,7 @@ class EmployeeServiceTest {
         //when
         employeeService.create(lucy);
         /* then */
-        verify(mockedEmployeeInMemoryRepository).create(argThat(Employee::getActive));
+        verify(mockedEmployeeRepository).save(argThat(Employee::getActive));
     }
 
     @Test

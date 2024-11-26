@@ -54,10 +54,14 @@ public class EmployeeService {
         if(!employeeExisted.getActive())
             throw new EmployeeInactiveException();
 
-        return employeeInMemoryRepository.update(employeeId, employee);
+        Employee byId = findById(employeeId);
+        byId.setAge(employee.getAge());
+        byId.setSalary(employee.getSalary());
+        employeeRepository.save(byId);
+        return byId;
     }
 
     public void delete(Integer employeeId) {
-        employeeInMemoryRepository.deleteById(employeeId);
+        employeeRepository.deleteById(employeeId);
     }
 }
