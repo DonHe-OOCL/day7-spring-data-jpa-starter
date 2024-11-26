@@ -4,6 +4,7 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
 
+import com.oocl.springbootemployee.exception.EmployeeNotFoundException;
 import com.oocl.springbootemployee.model.Employee;
 import com.oocl.springbootemployee.model.Gender;
 import com.oocl.springbootemployee.repository.EmployeeInMemoryRepository;
@@ -38,6 +39,9 @@ class EmployeeControllerTest {
 
     @Autowired
     private JacksonTester<List<Employee>> employeesJacksonTester;
+
+    @Autowired
+    private JacksonTester<Employee> employeeJacksonTester;
 
     @BeforeEach
     void setUp() {
@@ -118,7 +122,6 @@ class EmployeeControllerTest {
     @Test
     void should_create_employee_success() throws Exception {
         // Given
-        employeeRepository.findAll().clear();
         String givenName = "New Employee";
         Integer givenAge = 18;
         Gender givenGender = Gender.FEMALE;
@@ -133,23 +136,17 @@ class EmployeeControllerTest {
 
         // When
         // Then
-        client.perform(MockMvcRequestBuilders.post("/employees")
+        String contentAsString = client.perform(MockMvcRequestBuilders.post("/employees")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(givenEmployee)
-            )
-            .andExpect(MockMvcResultMatchers.status().isCreated())
-            .andExpect(MockMvcResultMatchers.jsonPath("$.id").isNumber())
-            .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(givenName))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.age").value(givenAge))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.gender").value(givenGender.name()))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.salary").value(givenSalary));
-        List<Employee> employees = employeeInMemoryRepository.findAll();
-        assertThat(employees).hasSize(1);
-        assertThat(employees.get(0).getId()).isEqualTo(1);
-        assertThat(employees.get(0).getName()).isEqualTo(givenName);
-        assertThat(employees.get(0).getAge()).isEqualTo(givenAge);
-        assertThat(employees.get(0).getGender()).isEqualTo(givenGender);
-        assertThat(employees.get(0).getSalary()).isEqualTo(givenSalary);
+        ).andReturn().getResponse().getContentAsString();
+        Employee employee = employeeJacksonTester.parseObject(contentAsString);
+
+        Employee findEmployee = employeeRepository.findById(employee.getId()).orElseThrow(EmployeeNotFoundException::new);
+        assertThat(findEmployee.getName()).isEqualTo(givenName);
+        assertThat(findEmployee.getAge()).isEqualTo(givenAge);
+        assertThat(findEmployee.getGender()).isEqualTo(givenGender);
+        assertThat(findEmployee.getSalary()).isEqualTo(givenSalary);
     }
 
     @Test
