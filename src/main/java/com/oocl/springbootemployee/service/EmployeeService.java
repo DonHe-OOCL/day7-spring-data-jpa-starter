@@ -10,6 +10,8 @@ import com.oocl.springbootemployee.repository.EmployeeInMemoryRepository;
 import java.util.List;
 
 import com.oocl.springbootemployee.repository.EmployeeRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 @Service
@@ -50,15 +52,13 @@ public class EmployeeService {
     }
 
     public Employee update(Integer employeeId , Employee employee) {
-        Employee employeeExisted = employeeInMemoryRepository.findById(employeeId);
+        Employee employeeExisted = findById(employeeId);
         if(!employeeExisted.getActive())
             throw new EmployeeInactiveException();
-
-        Employee byId = findById(employeeId);
-        byId.setAge(employee.getAge());
-        byId.setSalary(employee.getSalary());
-        employeeRepository.save(byId);
-        return byId;
+        employeeExisted.setAge(employee.getAge());
+        employeeExisted.setSalary(employee.getSalary());
+        employeeRepository.save(employeeExisted);
+        return employeeExisted;
     }
 
     public void delete(Integer employeeId) {
