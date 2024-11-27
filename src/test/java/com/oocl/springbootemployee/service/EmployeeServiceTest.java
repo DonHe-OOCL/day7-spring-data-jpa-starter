@@ -13,7 +13,6 @@ import com.oocl.springbootemployee.exception.EmployeeAgeSalaryNotMatchedExceptio
 import com.oocl.springbootemployee.exception.EmployeeInactiveException;
 import com.oocl.springbootemployee.model.Employee;
 import com.oocl.springbootemployee.model.Gender;
-import com.oocl.springbootemployee.repository.EmployeeInMemoryRepository;
 import java.util.List;
 import java.util.Optional;
 
